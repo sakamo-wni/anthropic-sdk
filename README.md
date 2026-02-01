@@ -36,12 +36,11 @@ User → Triage Controller → Investigator Controller → Summary → (Approval
 git clone https://github.com/your-org/cloudwatch-triage-agent.git
 cd cloudwatch-triage-agent
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install dependencies
-pip install -e ".[dev]"
+# Sync dependencies
+uv sync
 ```
 
 ## Configuration
@@ -87,19 +86,19 @@ service_log_groups = {
 
 ```bash
 # Investigate an incident
-triage investigate "500 errors in checkout API since 10am"
+uv run triage investigate "500 errors in checkout API since 10am"
 
 # Investigate with service/environment hints
-triage investigate -s payment-service -e prod "Payment failures"
+uv run triage investigate -s payment-service -e prod "Payment failures"
 
 # Skip confirmation prompts
-triage investigate -y "Database timeout errors"
+uv run triage investigate -y "Database timeout errors"
 
 # List configured services
-triage list-services
+uv run triage list-services
 
 # Check configuration
-triage check-config
+uv run triage check-config
 ```
 
 ### Programmatic Usage
@@ -144,16 +143,16 @@ asyncio.run(main())
 
 ```bash
 # Run tests
-pytest
+uv run pytest
 
 # Run tests with coverage
-pytest --cov=cloudwatch_triage_agent
+uv run pytest --cov=cloudwatch_triage_agent
 
 # Type checking
-mypy src/
+uv run mypy src/
 
 # Linting
-ruff check src/
+uv run ruff check src/
 ```
 
 ## License
