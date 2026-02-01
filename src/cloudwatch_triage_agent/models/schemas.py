@@ -1,13 +1,13 @@
 """Pydantic schemas for CloudWatch Triage Agent."""
 
-from datetime import datetime
-from enum import Enum
+from datetime import datetime, timezone
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class Environment(str, Enum):
+class Environment(StrEnum):
     """Target environment."""
 
     DEV = "dev"
@@ -108,7 +108,8 @@ class InvestigationReport(BaseModel):
         default_factory=list, description="Recommended next actions"
     )
     created_at: datetime = Field(
-        default_factory=datetime.utcnow, description="Report creation time"
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Report creation time",
     )
 
 
